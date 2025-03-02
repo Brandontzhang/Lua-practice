@@ -1,3 +1,22 @@
+-- Create a default metatables
+
+table = setmetatable({}, {
+	-- will look in __index for missing keys
+	__index = {
+		default = "value",
+	},
+	__newindex = function(table, key, value)
+		-- this function runs whenever a new key is added
+		print("Adding new key")
+		table[key] = value
+	end,
+	__tostring = function()
+		-- custom tostring value
+		return "custom"
+	end,
+})
+
+-- Using __newindex to lock a table
 local locked_table = { name = "Brandon" }
 setmetatable(locked_table, {
 	__newindex = function(_, key, _)
@@ -10,7 +29,9 @@ setmetatable(locked_table, {
 
 -- Simulating OOP
 local Person = {}
-Person.__index = Person -- setting the index as itself... what this means I'm not sure yet
+-- Setting the index as itself
+-- If an instance sets person as the metatable, any null values will default to the Person through __index
+Person.__index = Person -- setting the index as itself...
 
 -- A constructor
 function Person:new(name, age)
